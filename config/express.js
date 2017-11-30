@@ -3,7 +3,8 @@ var config = require('./config')
 	, bodyParser = require('body-parser')
 	, morgan = require('morgan')
 	, methodOverride = require('method-override')
-	, errorhandler = require('errorhandler');
+	, errorhandler = require('errorhandler')
+	, routes = require('../app/routes');
 
 module.exports = function() {
 	var app = express();
@@ -34,6 +35,8 @@ module.exports = function() {
 	    message: str
 	  })
 	}
+
+	routes.init(app);
 
 	app.use(express.static('app/public'));
 

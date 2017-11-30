@@ -4,7 +4,7 @@
   "description": "web app to manage Facebook Photos",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,6 +26,7 @@
     "vue-resource": "^0.1.17"
   },
   "devDependencies": {
+    "nodemon": "^1.11.0",
     "body-parser": "^1.14.1",
     "hbs": "^4.0.1",
     "errorhandler": "^1.4.2",
