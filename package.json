@@ -22,6 +22,8 @@
     "ejs": "^2.3.4",
     "express": "^4.13.3",
     "morgan": "^1.6.1",
+    "passport": "latest",
+    "passport-facebook": "latest",
     "vue": "^1.0.10",
     "vue-resource": "^0.1.17"
   },
