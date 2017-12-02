@@ -24,6 +24,7 @@
     "morgan": "^1.6.1",
     "passport": "latest",
     "passport-facebook": "latest",
+    "passport-local": "latest",
     "mongoose": "*",
     "vue": "^1.0.10",
     "vue-resource": "^0.1.17"
