@@ -38,6 +38,8 @@ module.exports = function() {
 
 	routes.init(app);
 
+	require('../app/routes/api.js')(app);
+
 	app.use(express.static('app/public'));
 
 	return app;
