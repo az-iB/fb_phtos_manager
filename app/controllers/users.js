@@ -32,3 +32,13 @@ exports.facebookCallback = function(req, res, next){
         successRedirect: '/',
         failureRedirect: '/login' });
 };
+
+exports.isAuthenticated = function (req, res, next) {
+  if (!req.user) {
+    
+    res.json({ message: 'hooray! welcome to our api!' });
+    return res.redirect('/login');
+  }
+
+  return next();
+};

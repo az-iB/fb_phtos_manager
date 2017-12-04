@@ -7,7 +7,7 @@ require([
 	Vue.use(VueRouter);
 
   var router = new VueRouter({
-    mode: 'hash',
+    mode: 'history',
     routes: AppRoutes
   });
  
