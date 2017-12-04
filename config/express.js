@@ -5,7 +5,8 @@ var config = require('./config')
 	, methodOverride = require('method-override')
 	, errorhandler = require('errorhandler')
 	, routes = require('../app/routes')
-	, session = require('express-session');
+	, session = require('express-session')
+	, passport = require('passport');
 
 module.exports = function() {
 	var app = express();
@@ -17,6 +18,15 @@ module.exports = function() {
 	}));
 
 	app.use(bodyParser.json());
+
+	app.use(session({
+	  secret: config.secret,
+	  resave: false,
+	  saveUninitialized: false
+	}))
+
+	app.use(passport.initialize());
+	app.use(passport.session());
 
 	app.set('views', 'app/views');
 	app.set('view engine', 'html');

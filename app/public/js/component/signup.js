@@ -19,7 +19,7 @@ define([
             <div class="row">
               <div class="col-lg-12">
                 
-                <form id="register-form" action="https://phpoll.com/register/process" method="post" role="form">
+                <form id="register-form" action="#" method="post" role="form">
                   <div class="form-group">
                     <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
                   </div>

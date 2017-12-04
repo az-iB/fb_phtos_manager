@@ -17,7 +17,7 @@ define([
           <div class="panel-body">
             <div class="row">
               <div class="col-lg-12">
-                <form id="login-form" action="https://phpoll.com/login/process" method="post" role="form" style="display: block;">
+                <form id="login-form" action="#" method="post" role="form" style="display: block;">
                   <div class="form-group">
                     <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
                   </div>
@@ -39,7 +39,7 @@ define([
                     <div class="row">
                       <div class="col-lg-12">
                         <div class="text-center">
-                          <a href="https://phpoll.com/recover" tabindex="5" class="forgot-password">Forgot Password?</a>
+                          <a href="#" tabindex="5" class="forgot-password">Forgot Password?</a>
                         </div>
                       </div>
                     </div>

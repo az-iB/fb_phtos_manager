@@ -35,10 +35,34 @@ exports.facebookCallback = function(req, res, next){
 
 exports.isAuthenticated = function (req, res, next) {
   if (!req.user) {
-    
-    res.json({ message: 'hooray! welcome to our api!' });
     return res.redirect('/login');
   }
 
   return next();
+};
+
+exports.register = function(req, res, next) {
+	if (!req.user) {
+		var user = new User(req.body);
+		var message = null;
+		user.provider = 'local';
+		user.save(function(err) {
+			if (err) {
+				console.log('error', err);
+				var message = getErrorMessage(err);
+				req.flash('error', message);
+				return res.redirect('/signup');
+			}
+
+			req.login(user, function(err) {
+				if (err)
+					return next(err);
+
+				return res.redirect('/');
+			});
+		});
+	}
+	else {
+		return res.redirect('/');
+	}
 };

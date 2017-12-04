@@ -13,4 +13,5 @@ module.exports = {
 		, callbackURL: 'http://127.0.0.1:'+ port +'/oauth/facebook/callback'
 		, profileFields: ['emails']
 	},
+	secret : 'azoulaytomadal_tidamdizRimagh',
 };

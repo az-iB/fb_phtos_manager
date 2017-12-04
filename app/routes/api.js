@@ -6,9 +6,9 @@ module.exports = function(app) {
 	// test api
 	app.route('/api').get(users.api);
 
-	app.route('/login').get(users.renderLogin);
+	app.route('/login').get(users.renderLogin).post(passport.authenticate('local', {successRedirect: '/',failureRedirect: '/login'}));
 
-	app.route('/signup').get(users.renderRegister);
+	app.route('/signup').get(users.renderRegister).post(users.register);
 
 	app.get('/oauth/facebook', passport.authenticate('facebook', {
 		failureRedirect: '/login',
