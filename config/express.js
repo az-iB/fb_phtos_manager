@@ -4,7 +4,8 @@ var config = require('./config')
 	, morgan = require('morgan')
 	, methodOverride = require('method-override')
 	, errorhandler = require('errorhandler')
-	, routes = require('../app/routes');
+	, routes = require('../app/routes')
+	, session = require('express-session');
 
 module.exports = function() {
 	var app = express();
