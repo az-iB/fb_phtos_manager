@@ -55,7 +55,12 @@ define([
     `,
     name: 'Login',
     data (router) {
-      return {}
+      return {
+        section: 'Login',
+        loading: '',
+        username: '',
+        password: ''
+      }
     },
     methods: {
       
