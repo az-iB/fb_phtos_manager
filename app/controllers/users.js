@@ -1,5 +1,6 @@
 var User = require('mongoose').model('User'),
 	passport = require('passport');
+	FB = require('fb');
 
 exports.api = function(req, res, next) {
 		res.json({ message: 'hooray! welcome to our api!' });
@@ -65,14 +66,14 @@ exports.user = function(req, res, next) {
 	res.json(req.user);
 };
 
-exports.saveOAuthUserProfile = function(req, profile, done) {
+exports.saveOAuthUserProfile = function(req, profile, next) {
 	User.findOne({
 			provider: profile.provider,
 			providerId: profile.providerId
 		},
 		function(err, user) {
 			if (err) {
-				return done(err);
+				return next(err);
 			}
 			else {
 				if (!user) {
@@ -88,14 +89,32 @@ exports.saveOAuthUserProfile = function(req, profile, done) {
 								return res.redirect('/register');
 							}
 
-							return done(err, user);
+							return next(err, user);
 						});
 					});
 				}
 				else {
-					return done(err, user);
+					return next(err, user);
 				}
 			}
 		}
 	);
 };
+
+exports.albums = function (req, res, next) {
+	var user = req.user;
+
+	if (user) {
+		if (user.hasAccess) {
+			
+			FB.setAccessToken(user.providerData.accessToken);
+			FB.api('/me/albums', function(resp) {
+			    
+			  return next(JSON.stringify(resp));
+			});
+
+		}
+	}
+
+};
+
