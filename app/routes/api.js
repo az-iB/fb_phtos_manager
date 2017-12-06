@@ -15,5 +15,12 @@ module.exports = function(app) {
 		scope:['email','user_photos']
 	}));
 
-	app.get('/oauth/facebook/callback', users.facebookCallback);
+	app.get('/oauth/facebook/callback', passport.authenticate('facebook', {
+		failureRedirect: '/login',
+		successRedirect: '/',
+		scope:['email','user_photos']
+	}));
+	
+	app.route('/user').get(users.user);
+
 };

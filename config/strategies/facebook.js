@@ -21,6 +21,7 @@ module.exports = function() {
 			name: profile.name.givenName,
 			email: profile.emails[0].value,
 			username: profile.username,
+			avatar: profile.photos ? profile.photos[0].value : '/img/faces/unknown-user-pic.jpg',
 			provider: 'facebook',
 			providerId: profile.id,
 			providerData: providerData

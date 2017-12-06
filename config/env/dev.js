@@ -11,7 +11,7 @@ module.exports = {
 		  clientID: "1973733189563938"
 		, clientSecret: "d830c308fed6cedd8556ed5dbb8ec81a"
 		, callbackURL: 'http://127.0.0.1:'+ port +'/oauth/facebook/callback'
-		, profileFields: ['emails']
+		, profileFields: ['emails', 'photos']
 	},
 	secret : 'azoulaytomadal_tidamdizRimagh',
 };

@@ -1,6 +1,7 @@
 define([
-  'vue'
-  ], function(Vue){
+  'vue',
+  'axios'
+  ], function(Vue, axios){
   return Vue.extend({
     template: `
 
@@ -9,9 +10,8 @@ define([
 
         <div class="row placeholders">
             <div class="  placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="100" height="100" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-             
+              <img :src= "user.avatar" width="100" height="100" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>{{user.username}}</h4>             
             </div>
             
           </div>
@@ -49,10 +49,25 @@ define([
 
     `,
     name: 'Home',
-    data (router) {
-      return {}
+    data () {
+      return {
+        user : {}
+      }
+    },
+    mounted () {
+      this.getUser();
     },
     methods: {
+      getUser: function(){
+        axios.get('/user')
+          .then(response => {
+            console.log(response);
+            this.user = response.data
+          })
+            .catch(e => {
+            this.errors.push(e)
+          })
+      }
       
     }
   });
