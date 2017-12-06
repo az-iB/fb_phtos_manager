@@ -1,6 +1,12 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
+var Albums = new Schema({
+        name: { type: String, default: 'empty name...' }
+      , created_time: { type: String, default: 'empty date' }
+      , id: {type: String, default: ''}
+});
+
 var UserSchema = new Schema({
     name: String,
     email: String,
@@ -17,7 +23,8 @@ var UserSchema = new Schema({
     },
     provider: String,
     providerId: String,
-    providerData: {}
+    providerData: {},
+    albums:[Albums]
 });
 
 UserSchema.statics.findUniqueUsername = function(username, suffix, callback) {

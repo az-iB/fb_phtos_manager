@@ -2,6 +2,10 @@ var User = require('mongoose').model('User'),
 	passport = require('passport');
 	FB = require('fb');
 
+function insert (req, res){
+
+}
+
 exports.api = function(req, res, next) {
 		res.json({ message: 'hooray! welcome to our api!' });
 };
@@ -67,51 +71,70 @@ exports.user = function(req, res, next) {
 };
 
 exports.saveOAuthUserProfile = function(req, profile, next) {
-	User.findOne({
-			provider: profile.provider,
-			providerId: profile.providerId
-		},
-		function(err, user) {
-			if (err) {
-				return next(err);
-			}
-			else {
-				if (!user) {
-					var possibleUsername = profile.username || ((profile.email) ? profile.email.split('@')[0] : '');
-					User.findUniqueUsername(possibleUsername, null, function(availableUsername) {
-						profile.username = availableUsername;
-						user = new User(profile);
-
-						user.save(function(err) {
-							if (err) {
-								var message = _this.getErrorMessage(err);
-								req.flash('error', message);
-								return res.redirect('/register');
-							}
-
-							return next(err, user);
-						});
-					});
+	if (!req.user) {
+		User.findOne({
+				provider: profile.provider,
+				providerId: profile.providerId
+			},
+			function(err, user) {
+				if (err) {
+					return next(err);
 				}
 				else {
-					return next(err, user);
+					if (!user) {
+						var possibleUsername = profile.username || ((profile.email) ? profile.email.split('@')[0] : '');
+						User.findUniqueUsername(possibleUsername, null, function(availableUsername) {
+							profile.username = availableUsername;
+							user = new User(profile);
+
+							user.save(function(err) {
+								if (err) {
+									var message = _this.getErrorMessage(err);
+									req.flash('error', message);
+									return res.redirect('/register');
+								}
+
+								return next(err, user);
+							});
+						});
+					}
+					else {
+						return next(err, user);
+					}
 				}
 			}
-		}
-	);
+		);
+	}
 };
 
 exports.albums = function (req, res, next) {
-	var user = req.user;
+	var userExist = req.user;
 
-	if (user) {
-		if (user.hasAccess) {
-			
-			FB.setAccessToken(user.providerData.accessToken);
-			FB.api('/me/albums', function(resp) {
-			    
-			  return next(JSON.stringify(resp));
+	if (userExist) {
+		if (userExist.hasAccess) {
+
+			User.findOne({
+				_id: userExist._id
+			},function(err,user){
+
+				FB.setAccessToken(userExist.providerData.accessToken);
+				FB.api('/me/albums', function(resp) {
+					let data = resp.data;
+
+				    
+				    data.forEach( function (album)
+					{
+					  	user.albums.push(album);
+
+						user.save(function (err) {
+							if (!err) console.log('Success!');
+						});
+					});
+					return next(data);
+				});
 			});
+			
+			
 
 		}
 	}
