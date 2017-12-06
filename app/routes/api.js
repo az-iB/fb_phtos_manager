@@ -22,5 +22,4 @@ module.exports = function(app) {
 	}));
 	
 	app.route('/user').get(users.user);
-
 };

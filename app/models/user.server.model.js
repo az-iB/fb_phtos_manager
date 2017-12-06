@@ -11,6 +11,10 @@ var UserSchema = new Schema({
     },
     password: String,
     avatar: String,
+    hasAccess: {
+        type: Boolean,
+        default: false
+    },
     provider: String,
     providerId: String,
     providerData: {}
