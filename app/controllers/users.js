@@ -2,9 +2,58 @@ var User = require('mongoose').model('User'),
 	passport = require('passport');
 	FB = require('fb');
 
-function insert (req, res){
+
+function getAlbums(user, callback ) {
+	FB.api('/me/albums',
+			{fields: 'id, name, created_time, cover_photo'},
+			function(resp) {
+				if (callback) {
+					let data = resp.data;
+					
+
+				    data.forEach( function (album){
+				    	console.log(album);
+				    	user.albums.push(album);
+					});
+					user.save(function (err) {
+							if (err) console.log(err);
+							else callback(data);
+					});
+				}
+			}
+		);
 
 }
+
+function getPhotos(user, albumId, callback ) {
+	
+	FB.api('/'+albumId+'/photos',
+		{fields: 'id, name, created_time'},
+		function(resp) {
+
+			let data = resp.data;
+
+			data.forEach( function (photo){
+		    	user.photos.push({
+		    		'id'	:	photo.id,
+		    		'name': photo.name,
+		    		'albumId': albumId,
+					'created_time'	:	photo.created_time,
+					'url'	:	'https://graph.facebook.com/' + photo.id + '/picture?access_token=' + user.providerData.accessToken
+		    	});
+			});
+			user.save(function (err) {
+					if (err) console.log(err);
+					else callback(true);
+			});
+
+			if (callback) {
+				callback( albumId, resp );
+			}
+		}
+	);
+}
+
 
 exports.api = function(req, res, next) {
 		res.json({ message: 'hooray! welcome to our api!' });
@@ -108,34 +157,32 @@ exports.saveOAuthUserProfile = function(req, profile, next) {
 };
 
 exports.albums = function (req, res, next) {
-	var userExist = req.user;
+	var userExist = req.user;	
 
 	if (userExist) {
+		var accessToken	= req.user.providerData.accessToken;
+
 		if (userExist.hasAccess) {
+
+			FB.setAccessToken(accessToken);
 
 			User.findOne({
 				_id: userExist._id
 			},function(err,user){
 
-				FB.setAccessToken(userExist.providerData.accessToken);
-				FB.api('/me/albums', function(resp) {
-					let data = resp.data;
+				getAlbums(user, function(albums) {
+					if (albums) {
+						setTimeout(function(){ 
+							albums.forEach( function (album){
+					    	getPhotos(user, album.id, function( albumId, resp ) {
 
-				    
-				    data.forEach( function (album)
-					{
-					  	user.albums.push(album);
-
-						user.save(function (err) {
-							if (!err) console.log('Success!');
+								if (albumId) {return next()}
+							})
 						});
-					});
-					return next(data);
+						}, 2000);
+					}  
 				});
 			});
-			
-			
-
 		}
 	}
 
