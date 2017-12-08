@@ -124,13 +124,17 @@ exports.register = function(req, res, next) {
 };
 
 exports.user = function(req, res, next) {
+	var accessToken = '';
+	if(req.user.providerData) {
+		accessToken= req.user.providerData.accessToken;
+	}
 	res.json({
 		id: req.user._id,
 		username: req.user.username,
 		avatar:req.user.avatar,
 		hasAccess:req.user.hasAccess,
 		synced: req.user.synced,
-		accessToken: req.user.providerData.accessToken
+		accessToken: accessToken
 	});
 };
 
@@ -238,3 +242,4 @@ exports.getPhotos = function (req, res, next) {
     });
 
 }
+

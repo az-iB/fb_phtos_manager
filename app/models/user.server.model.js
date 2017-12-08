@@ -18,7 +18,10 @@ var Albums = new Schema({
 
 var UserSchema = new Schema({
     name: String,
-    email: String,
+    email:{
+        type: String,
+        unique: true
+    },
     username: {
         type: String,
         trim: true,

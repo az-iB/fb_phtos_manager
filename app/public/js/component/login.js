@@ -24,14 +24,20 @@ define([
                   <div class="form-group">
                     <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password" v-model="password">
                   </div>
-                  <div class="form-group text-center">
-                    <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
-                    <label for="remember"> Remember Me</label>
-                  </div>
+                  
                   <div class="form-group">
                     <div class="row">
                       <div class="col-sm-6 col-sm-offset-3">
-                        <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+                        <div class="col-sm-6">
+                          <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">.
+                        </div>
+                        <div class="col-sm-6">
+                          <a class="form-control btn btn-login" href="/oauth/facebook" tabindex="5">Use Facebook</a>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-sm-offset-3">
+                       
+                        <a class="form-control btn btn-register" href="/signup" tabindex="5">Sign up</a>
                       </div>
                     </div>
                   </div>
@@ -39,7 +45,7 @@ define([
                 <div class="row">
                   <div class="col-lg-12">
                     <div class="text-center">
-                      <a href="/oauth/facebook" tabindex="5" class="forgot-password">Log in with Facebook</a>
+                      
                     </div>
                   </div>
                 </div>

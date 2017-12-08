@@ -31,6 +31,10 @@ define([
             </div>
             
           </div>
+          <div v-else>
+            <p>your are not connected to your facebook </p>
+              <button @click='facebookPermission'>connect to your facebook account</button>            
+          </div>
         </div>
       </div>
 
@@ -40,7 +44,8 @@ define([
       return {
         user : {},
         synced: false,
-        hasAccess: false
+        hasAccess: false,
+        errors:[]
       }
     },
     mounted () {
@@ -65,6 +70,9 @@ define([
         .then(response => {
           this.getUser();
         })
+      },
+      facebookPermission: function () {
+
       }
       
     },
