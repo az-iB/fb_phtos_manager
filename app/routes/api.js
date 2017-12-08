@@ -27,4 +27,6 @@ module.exports = function(app) {
 
 	app.route('/albums/:userId').get(users.getAlbums);
 
+	app.route('/photos/:albumId').get(users.getPhotos);
+
 };

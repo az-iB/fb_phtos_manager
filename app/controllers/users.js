@@ -11,6 +11,7 @@ function getAlbums(user, callback ) {
 				let data = resp.data;
 			    data.forEach( function (album){
 			    	user.albums.push({
+			    		'id':album.id,
 			    		'name': album.name,
 			    		'created_time': album.created_time,
 			    		'cover_photo':{
@@ -213,4 +214,27 @@ exports.getAlbums = function (req, res, next) {
 			}
 		}
 	);
+}
+
+
+exports.getPhotos = function (req, res, next) {
+
+	User.aggregate([
+   		{"$match" : 
+   			{
+   				_id: req.user._id
+   			}
+   		}, 
+	    {"$unwind" : "$photos"}, 
+	    {"$match" : {"photos.albumId":req.params.albumId}}, 
+	    
+	    {"$project" : {_id:0, photos:1}}
+	], function (err, result) {
+        if (err) {
+            rext(err);
+        } else {
+            res.send(result);
+        }
+    });
+
 }
