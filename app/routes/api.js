@@ -23,6 +23,6 @@ module.exports = function(app) {
 	
 	app.route('/user').get(users.user);
 
-	app.route('/albums').get(users.albums);
+	app.route('/sync').get(users.syncAcount);
 
 };

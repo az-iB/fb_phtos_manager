@@ -1,7 +1,8 @@
 define([
   'vue',
-  'axios'
-  ], function(Vue, axios){
+  'axios',
+  './views/albums'
+  ], function(Vue, axios, albums){
   return Vue.extend({
     template: `
 
@@ -20,29 +21,15 @@ define([
         </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    
-          <h2 class="sub-header">Section title</h2>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>lorem</td>
-                  <td>Lorem</td>
-                  <td>lorem</td>
-                  <td>lorem</td>
-                  <td>lorem</td>
-                </tr>                
-              </tbody>
-            </table>
+          <div v-if='hasAccess'>
+            <div v-if='synced'>
+              <albums></albums>
+            </div>
+            <div v-else>
+              <p>your are connected to your facebook all you need is to import your albums  </p>
+              <button @click='syncAcount'>import</button>
+            </div>
+            
           </div>
         </div>
       </div>
@@ -51,7 +38,9 @@ define([
     name: 'Home',
     data () {
       return {
-        user : {}
+        user : {},
+        synced: false,
+        hasAccess: false
       }
     },
     mounted () {
@@ -61,14 +50,26 @@ define([
       getUser: function(){
         axios.get('/user')
           .then(response => {
-            console.log(response);
-            this.user = response.data
+           
+            this.user = response.data;
+            this.synced = response.data.synced;
+            this.hasAccess = response.data.hasAccess
           })
             .catch(e => {
             this.errors.push(e)
           })
+      },
+      syncAcount: function(){
+        
+        axios.get('/sync')
+        .then(response => {
+          this.getUser();
+        })
       }
       
+    },
+    components: {
+      'albums': albums
     }
   });
 });

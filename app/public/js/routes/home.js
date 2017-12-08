@@ -6,7 +6,7 @@ define([
     return [
       {
         path:'/',
-        component: Home
+        component: Home,
       },
       {
       	path:'/login',

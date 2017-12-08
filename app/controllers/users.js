@@ -5,24 +5,21 @@ var User = require('mongoose').model('User'),
 
 function getAlbums(user, callback ) {
 	FB.api('/me/albums',
-			{fields: 'id, name, created_time, cover_photo'},
-			function(resp) {
-				if (callback) {
-					let data = resp.data;
-					
-
-				    data.forEach( function (album){
-				    	console.log(album);
-				    	user.albums.push(album);
-					});
-					user.save(function (err) {
-							if (err) console.log(err);
-							else callback(data);
-					});
-				}
+		{fields: 'id, name, created_time, cover_photo'},
+		function(resp) {
+			if (callback) {
+				let data = resp.data;
+			    data.forEach( function (album){
+			    	user.albums.push(album);
+				});
+				user.synced = true;
+				user.save(function (err) {
+						if (err) console.log(err);
+						else callback(data);
+				});
 			}
-		);
-
+		}
+	);
 }
 
 function getPhotos(user, albumId, callback ) {
@@ -116,7 +113,12 @@ exports.register = function(req, res, next) {
 };
 
 exports.user = function(req, res, next) {
-	res.json(req.user);
+	res.json({
+		username: req.user.username,
+		avatar:req.user.avatar,
+		hasAccess:req.user.hasAccess,
+		synced: req.user.synced
+	});
 };
 
 exports.saveOAuthUserProfile = function(req, profile, next) {
@@ -134,6 +136,7 @@ exports.saveOAuthUserProfile = function(req, profile, next) {
 						var possibleUsername = profile.username || ((profile.email) ? profile.email.split('@')[0] : '');
 						User.findUniqueUsername(possibleUsername, null, function(availableUsername) {
 							profile.username = availableUsername;
+							profile.hasAccess = true;
 							user = new User(profile);
 
 							user.save(function(err) {
@@ -156,34 +159,30 @@ exports.saveOAuthUserProfile = function(req, profile, next) {
 	}
 };
 
-exports.albums = function (req, res, next) {
+exports.syncAcount = function (req, res, next) {
 	var userExist = req.user;	
 
 	if (userExist) {
 		var accessToken	= req.user.providerData.accessToken;
+		FB.setAccessToken(accessToken);
 
-		if (userExist.hasAccess) {
+		User.findOne({
+			_id: userExist._id
+		},function(err,user){
 
-			FB.setAccessToken(accessToken);
+			getAlbums(user, function(albums) {
+				if (albums) {
+					setTimeout(function(){ 
+						albums.forEach( function (album){
+				    	getPhotos(user, album.id, function( albumId, resp ) {
 
-			User.findOne({
-				_id: userExist._id
-			},function(err,user){
-
-				getAlbums(user, function(albums) {
-					if (albums) {
-						setTimeout(function(){ 
-							albums.forEach( function (album){
-					    	getPhotos(user, album.id, function( albumId, resp ) {
-
-								if (albumId) {return next()}
-							})
-						});
-						}, 2000);
-					}  
-				});
+							if (albumId) {res.end();}
+						})
+					});
+					}, 200);
+				}  
 			});
-		}
+		});
 	}
 
 };

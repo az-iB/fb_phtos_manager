@@ -34,7 +34,11 @@ var UserSchema = new Schema({
     providerId: String,
     providerData: {},
     albums:[Albums],
-    photos: [Photos]
+    photos: [Photos],
+    synced:{
+        type: Boolean,
+        default: false
+    }
 });
 
 UserSchema.statics.findUniqueUsername = function(username, suffix, callback) {

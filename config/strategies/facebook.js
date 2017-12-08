@@ -23,7 +23,6 @@ module.exports = function() {
 			username: profile.username,
 			avatar: profile.photos ? profile.photos[0].value : '/img/faces/unknown-user-pic.jpg',
 			provider: 'facebook',
-			hasAccess: true,
 			providerId: profile.id,
 			providerData: providerData
 		};
