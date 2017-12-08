@@ -2,6 +2,10 @@
 
 smale web-app that let the user export his photos from Facebook using vueJS with requireJs
 
+log in with facebook to test the app
+
+the local sing up need to be synced to facebook acount in progress...
+
 ## Getting Started
 
 To get you started you can simply clone the fb_phtos_manager repository and install the dependencies
