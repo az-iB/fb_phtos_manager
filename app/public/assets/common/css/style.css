@@ -192,3 +192,9 @@ sub-header {
 .auth {
   padding-top: 90px;
 }
+
+.radios {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}

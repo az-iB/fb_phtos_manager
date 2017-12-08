@@ -10,7 +10,17 @@ function getAlbums(user, callback ) {
 			if (callback) {
 				let data = resp.data;
 			    data.forEach( function (album){
-			    	user.albums.push(album);
+			    	user.albums.push({
+			    		'name': album.name,
+			    		'created_time': album.created_time,
+			    		'cover_photo':{
+			    			'created_time':album.cover_photo.created_time,
+			    			'id': album.cover_photo.id,
+			    			'url': 'https://graph.facebook.com/' + album.cover_photo.id + '/picture?access_token=' + user.providerData.accessToken
+			    		}
+
+
+			    	});
 				});
 				user.synced = true;
 				user.save(function (err) {
@@ -114,10 +124,12 @@ exports.register = function(req, res, next) {
 
 exports.user = function(req, res, next) {
 	res.json({
+		id: req.user._id,
 		username: req.user.username,
 		avatar:req.user.avatar,
 		hasAccess:req.user.hasAccess,
-		synced: req.user.synced
+		synced: req.user.synced,
+		accessToken: req.user.providerData.accessToken
 	});
 };
 
@@ -175,7 +187,6 @@ exports.syncAcount = function (req, res, next) {
 					setTimeout(function(){ 
 						albums.forEach( function (album){
 				    	getPhotos(user, album.id, function( albumId, resp ) {
-
 							if (albumId) {res.end();}
 						})
 					});
@@ -187,3 +198,19 @@ exports.syncAcount = function (req, res, next) {
 
 };
 
+exports.getAlbums = function (req, res, next) {
+	User.findOne({
+			_id: req.params.userId
+		},{
+			albums: 1
+		},
+		function(err, albums) {
+			if (err) {
+				return next(err);
+			}
+			else {
+				res.send(albums);
+			}
+		}
+	);
+}

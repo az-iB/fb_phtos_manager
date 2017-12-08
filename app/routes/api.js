@@ -25,4 +25,6 @@ module.exports = function(app) {
 
 	app.route('/sync').get(users.syncAcount);
 
+	app.route('/albums/:userId').get(users.getAlbums);
+
 };
