@@ -1,6 +1,6 @@
 # FB Photos Manager
 
-smale web-app that let the user export his photos from Facebook
+smale web-app that let the user export his photos from Facebook using vueJS with requireJs
 
 ## Getting Started
 
