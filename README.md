@@ -1,4 +1,4 @@
-# FB Photos Manager
+# FB Photos Manager (created to explore vuejs)
 
 smale web-app that let the user export his photos from Facebook using vueJS with requireJs
 
